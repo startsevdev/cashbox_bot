@@ -1,0 +1,24 @@
+import sys
+from datetime import datetime
+import telebot
+from db import Database
+sys.path.append('../')
+import tokens
+
+bot = telebot.TeleBot(tokens.KKCashboxBot, threaded=False)
+db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
+
+
+def console_print(message):
+    now = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    print("{} | {}: {}".format(now, message.from_user.first_name, message.text))
+
+
+@bot.message_handler(content_types="text")
+def text(message):
+    console_print(message)
+    db.add_item(message.text)
+    bot.send_message(message.from_user.id, "{} добавлено.".format(message.text))
+
+
+bot.polling()
