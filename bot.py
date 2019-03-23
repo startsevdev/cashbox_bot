@@ -17,8 +17,7 @@ def console_print(message):
 @bot.message_handler(content_types="text")
 def text(message):
     console_print(message)
-    db.add_item(message.text)
-    bot.send_message(message.from_user.id, "{} добавлено.".format(message.text))
+    bot.send_message(message.from_user.id, db.add_item(message.text))
 
 
-bot.polling()
+bot.infinity_polling()

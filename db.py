@@ -12,7 +12,13 @@ class Database(object):
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
         cursor.execute("SELECT id FROM items WHERE name = '{}'".format(name))
-        item_id = cursor.fetchone()[0]
-        cursor.execute("INSERT INTO sales VALUES (Null, {}, '{}')".format(item_id, date))
-        conn.commit()
-        conn.close()
+        try:
+            item_id = cursor.fetchone()[0]
+        except TypeError:
+            return "Ошибка! Такого товара нет в меню. Попробуй еще раз."
+        else:
+            cursor.execute("INSERT INTO sales VALUES (Null, {}, '{}')".format(item_id, date))
+            conn.commit()
+            return "{} added".format(name)
+        finally:
+            conn.close()
