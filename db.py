@@ -6,8 +6,9 @@ class Database(object):
     def __init__(self, path):
         self.path = path
 
-    def add_item(self, name):
+    def add_sale(self, name):
         date = datetime.strftime(datetime.now(), "%d.%m.%Y")
+        time = datetime.strftime(datetime.now(), "%H:%M:%S")
 
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
@@ -17,7 +18,7 @@ class Database(object):
         except TypeError:
             return "Ошибка! Такого товара нет в меню. Попробуй еще раз."
         else:
-            cursor.execute("INSERT INTO sales VALUES (Null, {}, '{}')".format(item_id, date))
+            cursor.execute("INSERT INTO sales VALUES (Null, {}, '{}', '{}')".format(item_id, date, time))
             conn.commit()
             return "{} added".format(name)
         finally:
