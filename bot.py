@@ -24,14 +24,15 @@ def revenue(message):
 @bot.message_handler(content_types="text")
 def text(message):
     console_print(message)
-    if "выручка" in message.text.lower():
-        result = re.search("\d{2}.\d{2}.\d{4}", message.text)
-        try:
-            date = result.group(0)
-        except AttributeError:
-            bot.send_message(message.from_user.id, db.revenue())
-        else:
-            bot.send_message(message.from_user.id, db.revenue(date))
+
+    search_date_result = re.search("\d{2}.\d{2}.\d{4}", message.text)
+    if "выручка" in message.text.lower() and search_date_result:
+        date = search_date_result.group(0)
+        bot.send_message(message.from_user.id, db.revenue(date))
+    elif "выручка" == message.text.lower():
+        bot.send_message(message.from_user.id, db.revenue())
+    elif "выручка" in message.text.lower():
+        bot.send_message(message.from_user.id, "Ошибка! Неверный формат даты. Попробуй еше раз.")
     else:
         bot.send_message(message.from_user.id, db.add_sale(message.text))
 

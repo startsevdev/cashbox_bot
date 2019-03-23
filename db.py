@@ -12,6 +12,7 @@ class Database(object):
 
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
+
         cursor.execute("SELECT id FROM items WHERE name = '{}'".format(name))
         try:
             item_id = cursor.fetchone()[0]
@@ -26,13 +27,14 @@ class Database(object):
 
     def revenue(self, date=datetime.strftime(datetime.now(), "%d.%m.%Y")):
         prices = []
-        print(date)
 
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
+
         cursor.execute("SELECT item_id FROM sales WHERE date = '{}'".format(date))
         item_ids = cursor.fetchall()
         for item_id in item_ids:
             cursor.execute("SELECT price FROM items WHERE id = {}".format(item_id[0]))
             prices.append(cursor.fetchone()[0])
+        conn.close()
         return sum(prices)
