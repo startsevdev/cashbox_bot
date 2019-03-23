@@ -14,6 +14,12 @@ def console_print(message):
     print("{} | {}: {}".format(now, message.from_user.id, message.text))
 
 
+@bot.message_handler(commands=["revenue"])
+def revenue(message):
+    console_print(message)
+    bot.send_message(message.from_user.id, db.revenue())
+
+
 @bot.message_handler(content_types="text")
 def text(message):
     console_print(message)
