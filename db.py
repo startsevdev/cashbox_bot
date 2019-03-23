@@ -32,7 +32,6 @@ class Database(object):
         cursor = conn.cursor()
         cursor.execute("SELECT item_id FROM sales WHERE date = '{}'".format(date))
         item_ids = cursor.fetchall()
-        print(item_ids)
         for item_id in item_ids:
             cursor.execute("SELECT price FROM items WHERE id = {}".format(item_id[0]))
             prices.append(cursor.fetchone()[0])

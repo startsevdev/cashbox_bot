@@ -1,4 +1,5 @@
 import sys
+import re
 from datetime import datetime
 import telebot
 from db import Database
@@ -23,7 +24,16 @@ def revenue(message):
 @bot.message_handler(content_types="text")
 def text(message):
     console_print(message)
-    bot.send_message(message.from_user.id, db.add_sale(message.text))
+    if "выручка" in message.text.lower():
+        result = re.search("\d{2}.\d{2}.\d{4}", message.text)
+        try:
+            date = result.group(0)
+        except AttributeError:
+            date = None
+        print(date)
+        bot.send_message(message.from_user.id, db.revenue())
+    else:
+        bot.send_message(message.from_user.id, db.add_sale(message.text))
 
 
 bot.polling()
