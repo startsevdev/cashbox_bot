@@ -29,9 +29,9 @@ def text(message):
         try:
             date = result.group(0)
         except AttributeError:
-            date = None
-        print(date)
-        bot.send_message(message.from_user.id, db.revenue())
+            bot.send_message(message.from_user.id, db.revenue())
+        else:
+            bot.send_message(message.from_user.id, db.revenue(date))
     else:
         bot.send_message(message.from_user.id, db.add_sale(message.text))
 

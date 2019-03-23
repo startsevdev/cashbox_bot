@@ -24,9 +24,9 @@ class Database(object):
         finally:
             conn.close()
 
-    def revenue(self):
+    def revenue(self, date=datetime.strftime(datetime.now(), "%d.%m.%Y")):
         prices = []
-        date = datetime.strftime(datetime.now(), "%d.%m.%Y")
+        print(date)
 
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
