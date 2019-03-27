@@ -38,3 +38,19 @@ class Database(object):
             prices.append(cursor.fetchone()[0])
         conn.close()
         return sum(prices)
+
+    def table(self):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+        table_cursor = cursor.execute("SELECT * FROM sales")
+        return table_cursor
+
+    def item_name(self, item_id):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT name FROM items WHERE id = {}".format(item_id))
+        item_name = cursor.fetchone()[0]
+
+        conn.close()
+        return item_name
