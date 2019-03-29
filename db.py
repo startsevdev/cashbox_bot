@@ -39,10 +39,16 @@ class Database(object):
         conn.close()
         return sum(prices)
 
-    def table(self):
+    def all_sales(self):
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
         table_cursor = cursor.execute("SELECT * FROM sales")
+        return table_cursor
+
+    def date_sales(self, date):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+        table_cursor = cursor.execute("SELECT * FROM sales WHERE date = '{}'".format(date))
         return table_cursor
 
     def item_name(self, item_id):
@@ -54,3 +60,24 @@ class Database(object):
 
         conn.close()
         return item_name
+
+    def check_date(self, date):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id FROM sales WHERE date = '{}'".format(date))
+        try:
+            sale = cursor.fetchone()[0]
+        except TypeError:
+            return False
+        else:
+            return True
+        finally:
+            conn.close()
+
+
+
+
+db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
+r = db.check_date("23.03.2019")
+print(r)

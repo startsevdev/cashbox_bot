@@ -26,8 +26,12 @@ def revenue(message):
 @bot.message_handler(content_types="text")
 def text(message):
     console_print(message)
-    bot_message = parser.parse_mesage(message.text)
-    bot.send_message(message.from_user.id, bot_message)
+    bot_message = parser.parse_message(message.text)
+    if bot_message:
+        bot.send_message(message.from_user.id, bot_message)
+    else:
+        report_csv = open('sales.txt', 'rb')
+        bot.send_document(message.chat.id, report_csv)
 
 
 bot.polling()
