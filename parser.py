@@ -10,15 +10,14 @@ class Parser(object):
 
     def parse_message(self, string):
         string = string.lower()
+        # sql-injection protection
+        string = re.sub("'", "", string)
         date = self.search_date(string)
 
         if "выручка" in string:
             return self.parse_revenue_message(string, date)
         elif "отчет" in string or "отчёт" in string:
             return self.parse_report_message(string, date)
-        # sql-injection protection
-        elif string == "'":
-            return "Ошибка! Такого товара нет в меню. Попробуй еще раз."
         else:
             return self.db.add_sale(string.capitalize())
 
