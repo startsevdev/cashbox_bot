@@ -79,3 +79,7 @@ class Database(object):
         items = []
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
+        cursor.execute("SELECT name FROM items")
+        for tuple in cursor.fetchall():
+            items.append(tuple[0])
+        return items
