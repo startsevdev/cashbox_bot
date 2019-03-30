@@ -10,17 +10,35 @@ class Parser(object):
 
     def parse_message(self, string):
         string = string.lower()
-        search_date_result = re.search("\d{2}.\d{2}.\d{4}", string)
+        date = self.search_date(string)
+
         if "выручка" in string:
-            return self.parse_revenue_message(string, search_date_result)
+            if date and self.db.check_date(date):
+                return self.db.revenue(date)
+            elif date:
+                return "Нет данных за этот день."
+            else:
+                return self.db.revenue()
         elif "отчет" in string:
-            return self.parse_report_message(string, search_date_result)
+            if date and self.db.check_date(date):
+                return self.csv_generator.write_csv(date)
+            elif date:
+                return "Нет данных за этот день."
+            else:
+                return self.csv_generator.write_csv()
         else:
             return self.db.add_sale(string.capitalize())
 
-    def parse_revenue_message(self, string, search_date_result):
+    def search_date(self, string):
+        search_date_result = re.search("\d{2}.\d{2}.\d{4}", string)
         if search_date_result:
-            date = search_date_result.group(0)
+            date = search_date_result.group()
+            return date
+
+
+
+    def parse_revenue_message(self, string, date):
+        if date:
             return self.db.revenue(date)
         elif "выручка" == string:
             return self.db.revenue()

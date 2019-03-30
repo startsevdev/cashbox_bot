@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 from db import Database
 
 
@@ -6,7 +7,7 @@ class CSVGenerator(object):
     def __init__(self):
         self.db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
 
-    def write_csv(self, date=0):
+    def write_csv(self, date=datetime.strftime(datetime.now(), "%d.%m.%Y")):
         if date:
             table = self.db.date_sales(date)
         else:

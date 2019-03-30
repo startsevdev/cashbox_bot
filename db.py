@@ -75,9 +75,4 @@ class Database(object):
         finally:
             conn.close()
 
-
-
-
 db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
-r = db.check_date("23.03.2019")
-print(r)
