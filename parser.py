@@ -13,23 +13,9 @@ class Parser(object):
         date = self.search_date(string)
 
         if "выручка" in string:
-            if date and self.db.check_date(date):
-                return self.db.revenue(date)
-            elif date:
-                return "Нет данных за этот день."
-            elif string == "выручка":
-                return self.db.revenue()
-            else:
-                return "Ошибка! Неверный формат даты."
+            return self.parse_revenue_message(string, date)
         elif "отчет" in string or "отчёт" in string:
-            if date and self.db.check_date(date):
-                return self.csv_generator.write_csv(date)
-            elif date:
-                return "Нет данных за этот день."
-            elif string == "отчет" or string == "отчёт":
-                return self.csv_generator.write_csv()
-            else:
-                return "Ошибка! Неверный формат даты."
+            return self.parse_report_message(string, date)
         else:
             return self.db.add_sale(string.capitalize())
 
@@ -39,21 +25,22 @@ class Parser(object):
             date = search_date_result.group()
             return date
 
-
-
     def parse_revenue_message(self, string, date):
-        if date:
+        if date and self.db.check_date(date):
             return self.db.revenue(date)
-        elif "выручка" == string:
+        elif date:
+            return "Нет данных за этот день."
+        elif string == "выручка":
             return self.db.revenue()
         else:
-            return "Ошибка! Неверный формат даты. Попробуй еще раз."
+            return "Ошибка! Неверный формат даты."
 
-    def parse_report_message(self, string, search_date_result):
-        if search_date_result and self.db.check_date():
-            date = search_date_result.group(0)
+    def parse_report_message(self, string, date):
+        if date and self.db.check_date(date):
             return self.csv_generator.write_csv(date)
-        elif "отчет" == string:
+        elif date:
+            return "Нет данных за этот день."
+        elif string == "отчет" or string == "отчёт":
             return self.csv_generator.write_csv()
         else:
-            return "Ошибка! Неверный формат даты. Попробуй еще раз."
+            return "Ошибка! Неверный формат даты."
