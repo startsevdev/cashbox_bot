@@ -17,15 +17,19 @@ class Parser(object):
                 return self.db.revenue(date)
             elif date:
                 return "Нет данных за этот день."
-            else:
+            elif string == "выручка":
                 return self.db.revenue()
-        elif "отчет" in string:
+            else:
+                return "Ошибка! Неверный формат даты."
+        elif "отчет" in string or "отчёт" in string:
             if date and self.db.check_date(date):
                 return self.csv_generator.write_csv(date)
             elif date:
                 return "Нет данных за этот день."
-            else:
+            elif string == "отчет" or string == "отчёт":
                 return self.csv_generator.write_csv()
+            else:
+                return "Ошибка! Неверный формат даты."
         else:
             return self.db.add_sale(string.capitalize())
 
