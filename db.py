@@ -74,5 +74,3 @@ class Database(object):
             return True
         finally:
             conn.close()
-
-db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
