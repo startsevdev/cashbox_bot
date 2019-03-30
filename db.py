@@ -74,3 +74,8 @@ class Database(object):
             return True
         finally:
             conn.close()
+
+    def items_list(self):
+        items = []
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()

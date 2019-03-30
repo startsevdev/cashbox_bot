@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from db import Database
 from csv_generator import CSVGenerator
 
@@ -43,6 +44,8 @@ class Parser(object):
         elif date:
             return "Нет данных за этот день."
         elif string == "отчет" or string == "отчёт":
-            return self.csv_generator.write_csv()
+            return self.csv_generator.write_csv(date=datetime.strftime(datetime.now(), "%d.%m.%Y"))
+        elif string == "отчет полный" or string == "отчёт полный":
+            return self.csv_generator.write_csv(date)
         else:
             return "Ошибка! Неверный формат даты."
