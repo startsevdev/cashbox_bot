@@ -21,13 +21,18 @@ def keyboard():
     return kb
 
 
-
 def console_print(message):
     now = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     print("{} | {}: {}".format(now, message.from_user.id, message.text))
 
 
 @bot.message_handler(commands=["revenue"])
+def revenue(message):
+    console_print(message)
+    bot.send_message(message.from_user.id, db.revenue(), reply_markup=keyboard())
+
+
+@bot.message_handler(commands=["report"])
 def revenue(message):
     console_print(message)
     bot.send_message(message.from_user.id, db.revenue(), reply_markup=keyboard())
