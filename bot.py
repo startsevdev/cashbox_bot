@@ -5,6 +5,7 @@ from telebot import types
 from db import Database
 from parser import Parser
 from csv_generator import CSVGenerator
+import messages
 sys.path.append('../')
 import tokens
 
@@ -31,7 +32,7 @@ def console_print(message):
 @bot.message_handler(commands=["start"])
 def start(message):
     console_print(message)
-    bot.send_message(message.from_user.id, db.revenue(), reply_markup=keyboard())
+    bot.send_message(message.from_user.id, messages.hello_message, reply_markup=keyboard())
 
 
 @bot.message_handler(commands=["revenue"])
@@ -51,21 +52,7 @@ def report(message):
 @bot.message_handler(commands=["help"])
 def help(message):
     console_print(message)
-    help_text = '''
-    Чтобы добавить продажу, используй кнопку товара на клавиатуре бота.
-    
-    Команды:
-    /revenue - выручка за сегодня
-    /report - отчет за сегодня
-    
-    Запросы:
-    "Выручка" - выручка за сегодня
-    "Выручка 31.03.2019" - выручка за 31.03.2019
-    "Отчет" - отчет за сегодня
-    "Отчет 31.03.2019" - отчет за 31.03.2019
-    "Отчет полный" - отчет за все дни
-    '''
-    bot.send_message(message.from_user.id, help_text, reply_markup=keyboard())
+    bot.send_message(message.from_user.id, messages.help_message, reply_markup=keyboard())
 
 
 @bot.message_handler(content_types="text")
