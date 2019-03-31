@@ -61,6 +61,16 @@ class Database(object):
         conn.close()
         return item_name
 
+    def item_price(self, item_id):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT price FROM items WHERE id = {}".format(item_id))
+        item_price = cursor.fetchone()[0]
+
+        conn.close()
+        return item_price
+
     def check_date(self, date):
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()

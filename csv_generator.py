@@ -17,5 +17,5 @@ class CSVGenerator(object):
 
             file_writer.writerow(["id", "item", "date", "time"])
             for row in table:
-                file_writer.writerow([row[0], self.db.item_name(row[1]), row[2], row[3]])
+                file_writer.writerow([row[0], self.db.item_name(row[1]), self.db.item_price(row[1]), row[2], row[3]])
         return 0
