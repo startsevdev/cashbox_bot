@@ -21,7 +21,7 @@ class Database(object):
         else:
             cursor.execute("INSERT INTO sales VALUES (Null, {}, '{}', '{}')".format(item_id, date, time))
             conn.commit()
-            return "{} added".format(name)
+            return "{} added.".format(name)
         finally:
             conn.close()
 
@@ -89,7 +89,18 @@ class Database(object):
         items = []
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
-        cursor.execute("SELECT name FROM items")
+        cursor.execute("SELECT name FROM items ORDER BY id")
         for tuple in cursor.fetchall():
             items.append(tuple[0])
         return items
+
+    def del_last_sale(self):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, item_id FROM sales ORDER BY id DESC")
+        sale = cursor.fetchone()
+        sale_id = sale[0]
+        item_id = sale[1]
+        cursor.execute("DELETE FROM sales WHERE id = {}".format(sale_id))
+        conn.commit()
+        return "{} deleted.".format(self.item_name(item_id))

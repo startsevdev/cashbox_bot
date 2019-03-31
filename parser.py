@@ -19,6 +19,8 @@ class Parser(object):
             return self.parse_revenue_message(string, date)
         elif "отчет" in string or "отчёт" in string:
             return self.parse_report_message(string, date)
+        elif string == "отмена":
+            return self.db.del_last_sale()
         else:
             return self.db.add_sale(string.capitalize())
 
