@@ -21,7 +21,7 @@ class Database(object):
         else:
             cursor.execute("INSERT INTO sales VALUES (Null, {}, '{}', '{}')".format(item_id, date, time))
             conn.commit()
-            return "{} added.".format(name)
+            return name
         finally:
             conn.close()
 
@@ -99,8 +99,14 @@ class Database(object):
         cursor = conn.cursor()
         cursor.execute("SELECT id, item_id FROM sales ORDER BY id DESC")
         sale = cursor.fetchone()
-        sale_id = sale[0]
-        item_id = sale[1]
-        cursor.execute("DELETE FROM sales WHERE id = {}".format(sale_id))
-        conn.commit()
-        return "{} deleted.".format(self.item_name(item_id))
+        try:
+            sale_id, item_id = sale[0], sale[1]
+        except TypeError:
+            deleted_item_name = "Nothing"
+        else:
+            cursor.execute("DELETE FROM sales WHERE id = {}".format(sale_id))
+            conn.commit()
+            deleted_item_name = self.item_name(item_id)
+        finally:
+            conn.close()
+        return deleted_item_name

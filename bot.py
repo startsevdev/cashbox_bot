@@ -60,11 +60,10 @@ def send_help(message):
 def text(message):
     console_print(message)
     bot_message = parser.parse_message(message.text)
-    if bot_message:
+    if type(bot_message) == str or type(bot_message) == float:
         bot.send_message(message.from_user.id, bot_message, reply_markup=keyboard())
     else:
-        csv_report = open('sales.txt', 'rb')
-        bot.send_document(message.chat.id, csv_report, reply_markup=keyboard())
+        bot.send_document(message.chat.id, bot_message, reply_markup=keyboard())
 
 
 bot.polling()

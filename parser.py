@@ -10,19 +10,23 @@ class Parser(object):
         self.csv_generator = CSVGenerator()
 
     def parse_message(self, string):
-        string = string.lower()
         # sql-injection protection
         string = re.sub("'", "", string)
-        date = self.search_date(string)
+        string = re.sub('"', '', string)
+
+        string = string.lower()
 
         if "выручка" in string:
-            return self.parse_revenue_message(string, date)
+            bot_message = self.parse_revenue_message(string)
         elif "отчет" in string or "отчёт" in string:
-            return self.parse_report_message(string, date)
+            bot_message = self.parse_report_message(string)
         elif string == "отмена":
-            return self.db.del_last_sale()
+            deleted_item_name = self.db.del_last_sale()
+            bot_message = "{} deleted.".format(deleted_item_name)
         else:
-            return self.db.add_sale(string.capitalize())
+            added_item_name = self.db.add_sale(string.capitalize())
+            bot_message = "{} added.".format(added_item_name)
+        return bot_message
 
     def search_date(self, string):
         search_date_result = re.search("\d{2}.\d{2}.\d{4}", string)
@@ -30,24 +34,33 @@ class Parser(object):
             date = search_date_result.group()
             return date
 
-    def parse_revenue_message(self, string, date):
-        if date and self.db.check_date(date):
-            return self.db.revenue(date)
-        elif date:
-            return "Нет данных за этот день."
-        elif string == "выручка":
-            return self.db.revenue()
-        else:
-            return "Ошибка! Неверный формат даты."
+    def parse_revenue_message(self, string):
+        date = self.search_date(string)
 
-    def parse_report_message(self, string, date):
         if date and self.db.check_date(date):
-            return self.csv_generator.write_csv(date)
+            bot_message = self.db.revenue(date)
         elif date:
-            return "Нет данных за этот день."
-        elif string == "отчет" or string == "отчёт":
-            return self.csv_generator.write_csv(date=datetime.strftime(datetime.now(), "%d.%m.%Y"))
-        elif string == "отчет полный" or string == "отчёт полный":
-            return self.csv_generator.write_csv(date)
+            bot_message = "Нет данных за этот день."
+        elif string == "выручка":
+            bot_message = self.db.revenue()
         else:
-            return "Ошибка! Неверный формат даты."
+            bot_message = "Ошибка! Неверный формат даты."
+        return bot_message
+
+    def parse_report_message(self, string):
+        date = self.search_date(string)
+
+        if date and self.db.check_date(date):
+            self.csv_generator.write_csv(date)
+            bot_message = open('sales.txt', 'rb')
+        elif date:
+            bot_message = "Нет данных за этот день."
+        elif string == "отчет" or string == "отчёт":
+            self.csv_generator.write_csv(date=datetime.strftime(datetime.now(), "%d.%m.%Y"))
+            bot_message = open('sales.txt', 'rb')
+        elif string == "отчет полный" or string == "отчёт полный":
+            self.csv_generator.write_csv(0)
+            bot_message = open('sales.txt', 'rb')
+        else:
+            bot_message = "Ошибка! Неверный формат даты."
+        return bot_message
