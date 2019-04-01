@@ -6,12 +6,10 @@ from db import Database
 from parser import Parser
 from csv_generator import CSVGenerator
 import messages
-sys.path.append('../')
-import tokens
 
 
-bot = telebot.TeleBot(tokens.CoffeeCultureBot, threaded=False)
-db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
+bot = telebot.TeleBot("891562236:AAGSXMXUxN1gYlWVtlSisGCFRIsAIytBFtg", threaded=False)
+db = Database("/home/startsevdev/ccbot/data.db")
 parser = Parser()
 csv_generator = CSVGenerator()
 
@@ -66,4 +64,4 @@ def text(message):
         bot.send_document(message.chat.id, report_csv, reply_markup=keyboard())
 
 
-bot.polling()
+bot.infinity_polling(True)

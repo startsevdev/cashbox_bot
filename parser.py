@@ -6,7 +6,7 @@ from csv_generator import CSVGenerator
 
 class Parser(object):
     def __init__(self):
-        self.db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
+        self.db = Database("/home/startsevdev/ccbot/data.db")
         self.csv_generator = CSVGenerator()
 
     def parse_message(self, string):
