@@ -30,27 +30,28 @@ def console_print(message):
 
 
 @bot.message_handler(commands=["start"])
-def start(message):
+def send_hello(message):
     console_print(message)
     bot.send_message(message.from_user.id, messages.hello_message, reply_markup=keyboard())
 
 
 @bot.message_handler(commands=["revenue"])
-def revenue(message):
+def send_revenue(message):
     console_print(message)
-    bot.send_message(message.from_user.id, db.revenue(), reply_markup=keyboard())
+    revenue = db.revenue()
+    bot.send_message(message.from_user.id, revenue, reply_markup=keyboard())
 
 
 @bot.message_handler(commands=["report"])
-def report(message):
+def send_report(message):
     console_print(message)
     csv_generator.write_csv(date=datetime.strftime(datetime.now(), "%d.%m.%Y"))
-    report_csv = open('sales.txt', 'rb')
-    bot.send_document(message.chat.id, report_csv, reply_markup=keyboard())
+    csv_report = open('sales.txt', 'rb')
+    bot.send_document(message.chat.id, csv_report, reply_markup=keyboard())
 
 
 @bot.message_handler(commands=["help"])
-def help(message):
+def send_help(message):
     console_print(message)
     bot.send_message(message.from_user.id, messages.help_message, reply_markup=keyboard())
 
@@ -62,8 +63,8 @@ def text(message):
     if bot_message:
         bot.send_message(message.from_user.id, bot_message, reply_markup=keyboard())
     else:
-        report_csv = open('sales.txt', 'rb')
-        bot.send_document(message.chat.id, report_csv, reply_markup=keyboard())
+        csv_report = open('sales.txt', 'rb')
+        bot.send_document(message.chat.id, csv_report, reply_markup=keyboard())
 
 
 bot.polling()
