@@ -22,10 +22,16 @@ class Parser(object):
             bot_message = self.parse_report_message(string)
         elif string == "отмена":
             deleted_item_name = self.db.del_last_sale()
-            bot_message = "{} deleted.".format(deleted_item_name)
+            if deleted_item_name:
+                bot_message = "{} deleted.".format(deleted_item_name)
+            else:
+                bot_message = "Ошибка. Нечего удалять."
         else:
             added_item_name = self.db.add_sale(string.capitalize())
-            bot_message = "{} added.".format(added_item_name)
+            if added_item_name:
+                bot_message = "{} added.".format(added_item_name)
+            else:
+                bot_message = "Ошибка! Такого товара нет в меню. Попробуй еще раз."
         return bot_message
 
     def search_date(self, string):

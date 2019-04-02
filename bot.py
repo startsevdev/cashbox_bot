@@ -60,7 +60,7 @@ def send_help(message):
 def text(message):
     console_print(message)
     bot_message = parser.parse_message(message.text)
-    if type(bot_message) == str or type(bot_message) == float:
+    if type(bot_message) == str or type(bot_message) == float or type(bot_message) == int:
         bot.send_message(message.from_user.id, bot_message, reply_markup=keyboard())
     else:
         bot.send_document(message.chat.id, bot_message, reply_markup=keyboard())
