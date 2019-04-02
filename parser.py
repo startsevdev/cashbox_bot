@@ -51,16 +51,16 @@ class Parser(object):
         date = self.search_date(string)
 
         if date and self.db.check_date(date):
-            self.csv_generator.write_csv(date)
-            bot_message = open('sales.txt', 'rb')
+            csv_file = self.csv_generator.write_csv(date)
+            bot_message = open(csv_file, 'rb')
         elif date:
             bot_message = "Нет данных за этот день."
         elif string == "отчет" or string == "отчёт":
-            self.csv_generator.write_csv(date=datetime.strftime(datetime.now(), "%d.%m.%Y"))
-            bot_message = open('sales.txt', 'rb')
+            csv_file = self.csv_generator.write_csv(date=datetime.strftime(datetime.now(), "%d.%m.%Y"))
+            bot_message = open(csv_file, 'rb')
         elif string == "отчет полный" or string == "отчёт полный":
-            self.csv_generator.write_csv(0)
-            bot_message = open('sales.txt', 'rb')
+            csv_file = self.csv_generator.write_csv("all")
+            bot_message = open(csv_file, 'rb')
         else:
             bot_message = "Ошибка! Неверный формат даты."
         return bot_message
