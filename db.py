@@ -17,13 +17,14 @@ class Database(object):
         try:
             item_id = cursor.fetchone()[0]
         except TypeError:
-            return "Ошибка! Такого товара нет в меню. Попробуй еще раз."
+            bot_message = None
         else:
             cursor.execute("INSERT INTO sales VALUES (Null, {}, '{}', '{}')".format(item_id, date, time))
             conn.commit()
-            return "{} added.".format(name)
+            bot_message = name
         finally:
             conn.close()
+        return bot_message
 
     def revenue(self, date=datetime.strftime(datetime.now(), "%d.%m.%Y")):
         prices = []
@@ -79,19 +80,20 @@ class Database(object):
         try:
             sale = cursor.fetchone()[0]
         except TypeError:
-            return False
+            date_exists = False
         else:
-            return True
+            date_exists = True
         finally:
             conn.close()
+        return date_exists
 
     def items_list(self):
         items = []
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
         cursor.execute("SELECT name FROM items ORDER BY id")
-        for tuple in cursor.fetchall():
-            items.append(tuple[0])
+        for name_tuple in cursor.fetchall():
+            items.append(name_tuple[0])
         return items
 
     def del_last_sale(self):
@@ -99,8 +101,14 @@ class Database(object):
         cursor = conn.cursor()
         cursor.execute("SELECT id, item_id FROM sales ORDER BY id DESC")
         sale = cursor.fetchone()
-        sale_id = sale[0]
-        item_id = sale[1]
-        cursor.execute("DELETE FROM sales WHERE id = {}".format(sale_id))
-        conn.commit()
-        return "{} deleted.".format(self.item_name(item_id))
+        try:
+            sale_id, item_id = sale[0], sale[1]
+        except TypeError:
+            deleted_item_name = None
+        else:
+            cursor.execute("DELETE FROM sales WHERE id = {}".format(sale_id))
+            conn.commit()
+            deleted_item_name = self.item_name(item_id)
+        finally:
+            conn.close()
+        return deleted_item_name
