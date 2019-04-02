@@ -8,7 +8,7 @@ from csv_generator import CSVGenerator
 import messages
 
 
-bot = telebot.TeleBot("891562236:AAGSXMXUxN1gYlWVtlSisGCFRIsAIytBFtg", threaded=False)
+bot = telebot.TeleBot("TOKEN", threaded=False)
 db = Database("/home/startsevdev/ccbot/data.db")
 parser = Parser()
 csv_generator = CSVGenerator()
