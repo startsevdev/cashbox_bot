@@ -56,10 +56,13 @@ class Database(object):
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
 
-        if date:
+        if date == "all":
+            table_cursor = cursor.execute("SELECT * FROM sales")
+        elif date:
             table_cursor = cursor.execute("SELECT * FROM sales WHERE date = '{}'".format(date))
         else:
-            table_cursor = cursor.execute("SELECT * FROM sales")
+            table_cursor = cursor.execute("SELECT * FROM sales WHERE date = '{}'"
+                                          .format(datetime.strftime(datetime.now(), "%d.%m.%Y")))
         return table_cursor
 
     def item_name(self, item_id):
