@@ -7,10 +7,7 @@ class CSVGenerator(object):
         self.db = Database("/home/startsevdev/ccbot/data.db")
 
     def write_csv(self, date):
-        if date == "all":
-            table = self.db.all_sales()
-        else:
-            table = self.db.date_sales(date)
+        table = self.db.sales(date)
 
         with open("sales.txt", mode='w') as csv_file:
             csv_writer = csv.writer(csv_file)
