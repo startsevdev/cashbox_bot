@@ -52,6 +52,16 @@ class Database(object):
         table_cursor = cursor.execute("SELECT * FROM sales WHERE date = '{}'".format(date))
         return table_cursor
 
+    def sales(self, date):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+
+        if date:
+            table_cursor = cursor.execute("SELECT * FROM sales WHERE date = '{}'".format(date))
+        else:
+            table_cursor = cursor.execute("SELECT * FROM sales")
+        return table_cursor
+
     def item_name(self, item_id):
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
