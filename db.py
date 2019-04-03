@@ -40,18 +40,6 @@ class Database(object):
         conn.close()
         return sum(prices)
 
-    def all_sales(self):
-        conn = sqlite3.connect(self.path)
-        cursor = conn.cursor()
-        table_cursor = cursor.execute("SELECT * FROM sales")
-        return table_cursor
-
-    def date_sales(self, date):
-        conn = sqlite3.connect(self.path)
-        cursor = conn.cursor()
-        table_cursor = cursor.execute("SELECT * FROM sales WHERE date = '{}'".format(date))
-        return table_cursor
-
     def sales(self, date):
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
