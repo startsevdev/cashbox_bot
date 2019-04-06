@@ -4,7 +4,7 @@ from db import Database
 
 class CSVGenerator(object):
     def __init__(self):
-        self.db = Database("/home/startsevdev/ccbot/data.db")
+        self.db = Database("/home/startsevdev/cashbox_bot/data.db")
 
     def write_csv(self, date):
         table = self.db.sales(date)
