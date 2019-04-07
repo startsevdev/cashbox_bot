@@ -4,7 +4,7 @@ import sqlite3
 
 class Database(object):
     def __init__(self):
-        self.path = "/Users/alexander/code/bots/CashboxBot/cashbox_bot.db"
+        self.path = "/home/startsevdev/dbs/cashbox_bot.db"
 
     def add_sale(self, name):
         date = datetime.strftime(datetime.now(), "%d.%m.%Y")
