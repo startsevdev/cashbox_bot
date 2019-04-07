@@ -11,7 +11,7 @@ import tokens
 
 
 bot = telebot.TeleBot(tokens.CoffeeCultureBot, threaded=False)
-db = Database("/Users/alexander/code/bots/CashboxBot/data.db")
+db = Database()
 parser = Parser()
 csv_generator = CSVGenerator()
 

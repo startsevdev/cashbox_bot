@@ -3,8 +3,8 @@ import sqlite3
 
 
 class Database(object):
-    def __init__(self, path):
-        self.path = path
+    def __init__(self):
+        self.path = "/Users/alexander/code/bots/CashboxBot/cashbox_bot.db"
 
     def add_sale(self, name):
         date = datetime.strftime(datetime.now(), "%d.%m.%Y")
