@@ -9,7 +9,7 @@ import messages
 
 
 bot = telebot.TeleBot("TOKEN", threaded=False)
-db = Database("/home/startsevdev/cashbox_bot/data.db")
+db = Database()
 parser = Parser()
 csv_generator = CSVGenerator()
 
