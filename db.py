@@ -91,9 +91,9 @@ class Database(object):
         items = []
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
-        cursor.execute("SELECT name FROM items ORDER BY id")
-        for name_tuple in cursor.fetchall():
-            items.append(name_tuple[0])
+        cursor.execute("SELECT id FROM items ORDER BY id")
+        for id_tuple in cursor.fetchall():
+            items.append(Item(id_tuple[0]))
         return items
 
     def del_last_sale(self):
@@ -120,3 +120,9 @@ class Item(object):
         self.db = Database()
         self.name = self.db.item_name(self.id)
         self.price = self.db.item_price(self.id)
+
+
+db = Database()
+r = db.items_list()
+for item in r:
+    print(f"{item.name} - {item.price}")
