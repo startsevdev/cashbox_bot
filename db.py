@@ -9,7 +9,6 @@ class Database(object):
     def add_sale(self, name):
         date = datetime.strftime(datetime.now(), "%d.%m.%Y")
         time = datetime.strftime(datetime.now(), "%H:%M:%S")
-
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
 
@@ -113,3 +112,11 @@ class Database(object):
         finally:
             conn.close()
         return deleted_item_name
+
+
+class Item(object):
+    def __init__(self, id):
+        self.id = id
+        self.db = Database()
+        self.name = self.db.item_name(self.id)
+        self.price = self.db.item_price(self.id)
