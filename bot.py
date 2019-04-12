@@ -17,10 +17,15 @@ csv_generator = CSVGenerator()
 
 
 def keyboard():
-    items = db.items_list()
     kb = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-    for item in items:
-        kb.add(item)
+    items = db.items_list()
+    if len(items) % 2:
+        for i in range(0, len(items) - 1, 2):
+            kb.add(items[i], items[i + 1])
+        kb.add(items[i + 2])
+    else:
+        for i in range(0, len(items), 2):
+            kb.add(items[i], items[i + 1])
     return kb
 
 
