@@ -1,12 +1,14 @@
 import re
 from datetime import datetime
 from db import Database
+from dashboard import Dashboard
 from csv_generator import CSVGenerator
 
 
 class Parser(object):
     def __init__(self):
         self.db = Database()
+        self.dashboard = Dashboard()
         self.csv_generator = CSVGenerator()
 
     def parse_message(self, string):
@@ -48,7 +50,7 @@ class Parser(object):
         elif date:
             bot_message = "Нет данных за этот день."
         elif string == "выручка":
-            bot_message = self.db.revenue()
+            bot_message = self.dashboard.day_board()
         else:
             bot_message = "Ошибка! Неверный формат даты."
         return bot_message

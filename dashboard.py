@@ -12,7 +12,3 @@ class Dashboard(object):
             message += f"{item.name} - {item.sales} шт.\n"
         message += f"\nВыручка: {self.db.revenue()} р"
         return message
-
-d = Dashboard()
-r = d.day_board()
-print(r)

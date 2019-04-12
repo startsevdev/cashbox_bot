@@ -5,6 +5,7 @@ from telebot import types
 from db import Database
 from parser import Parser
 from csv_generator import CSVGenerator
+from dashboard import Dashboard
 import messages
 sys.path.append('../')
 import tokens
@@ -14,6 +15,7 @@ bot = telebot.TeleBot(tokens.CoffeeCultureBot, threaded=False)
 db = Database()
 parser = Parser()
 csv_generator = CSVGenerator()
+dashboard = Dashboard()
 
 
 def keyboard():
@@ -43,7 +45,7 @@ def send_hello(message):
 @bot.message_handler(commands=["revenue"])
 def send_revenue(message):
     console_print(message)
-    revenue = db.revenue()
+    revenue = dashboard.day_board()
     bot.send_message(message.from_user.id, revenue, reply_markup=keyboard())
 
 
