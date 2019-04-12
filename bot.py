@@ -21,11 +21,11 @@ def keyboard():
     items = db.items_list()
     if len(items) % 2:
         for i in range(0, len(items) - 1, 2):
-            kb.add(items[i], items[i + 1])
-        kb.add(items[i + 2])
+            kb.add(items[i].name, items[i + 1].name)
+        kb.add(items[i + 2].name)
     else:
         for i in range(0, len(items), 2):
-            kb.add(items[i], items[i + 1])
+            kb.add(items[i].name, items[i + 1].name)
     return kb
 
 

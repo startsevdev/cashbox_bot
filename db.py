@@ -52,6 +52,15 @@ class Database(object):
                                           .format(datetime.strftime(datetime.now(), "%d.%m.%Y")))
         return table_cursor
 
+    def item_sales(self, id):
+        conn = sqlite3.connect(self.path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM sales WHERE date = '{}' AND item_id = {}".
+                       format(datetime.strftime(datetime.now(), "%d.%m.%Y"), id))
+        number_of_sales = len(cursor.fetchall())
+        conn.close()
+        return number_of_sales
+
     def item_name(self, item_id):
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
@@ -91,9 +100,10 @@ class Database(object):
         items = []
         conn = sqlite3.connect(self.path)
         cursor = conn.cursor()
-        cursor.execute("SELECT id FROM items ORDER BY id")
+        cursor.execute("SELECT id FROM items ORDER BY name")
         for id_tuple in cursor.fetchall():
             items.append(Item(id_tuple[0]))
+        conn.close()
         return items
 
     def del_last_sale(self):
@@ -120,9 +130,4 @@ class Item(object):
         self.db = Database()
         self.name = self.db.item_name(self.id)
         self.price = self.db.item_price(self.id)
-
-
-db = Database()
-r = db.items_list()
-for item in r:
-    print(f"{item.name} - {item.price}")
+        self.sales = self.db.item_sales(self.id)
