@@ -6,9 +6,10 @@ from db import Database
 from parser import Parser
 from csv_generator import CSVGenerator
 import messages
+sys.path.append('../')
+import tokens
 
-
-bot = telebot.TeleBot("TOKEN", threaded=False)
+bot = telebot.TeleBot(tokens.CoffeeCultureBot, threaded=False)
 db = Database()
 parser = Parser()
 csv_generator = CSVGenerator()
