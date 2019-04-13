@@ -11,7 +11,7 @@ sys.path.append('../')
 import tokens
 
 
-bot = telebot.TeleBot(tokens.CoffeeCultureBot, threaded=False)
+bot = telebot.TeleBot(tokens.KKCashboxBot, threaded=False)
 db = Database()
 parser = Parser()
 csv_generator = CSVGenerator()
