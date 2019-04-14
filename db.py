@@ -25,7 +25,7 @@ class Database(object):
             conn.close()
         return bot_message
 
-    def revenue(self, date=datetime.strftime(datetime.now(), "%d.%m.%Y")):
+    def revenue(self, date):
         prices = []
 
         conn = sqlite3.connect(self.path)
@@ -51,35 +51,6 @@ class Database(object):
             table_cursor = cursor.execute("SELECT * FROM sales WHERE date = '{}'"
                                           .format(datetime.strftime(datetime.now(), "%d.%m.%Y")))
         return table_cursor
-
-    def item_sales(self, id):
-        conn = sqlite3.connect(self.path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM sales WHERE date = '{}' AND item_id = {}".
-                       format(datetime.strftime(datetime.now(), "%d.%m.%Y"), id))
-        number_of_sales = len(cursor.fetchall())
-        conn.close()
-        return number_of_sales
-
-    def item_name(self, item_id):
-        conn = sqlite3.connect(self.path)
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT name FROM items WHERE id = {}".format(item_id))
-        item_name = cursor.fetchone()[0]
-
-        conn.close()
-        return item_name
-
-    def item_price(self, item_id):
-        conn = sqlite3.connect(self.path)
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT price FROM items WHERE id = {}".format(item_id))
-        item_price = cursor.fetchone()[0]
-
-        conn.close()
-        return item_price
 
     def check_date(self, date):
         conn = sqlite3.connect(self.path)
@@ -112,13 +83,13 @@ class Database(object):
         cursor.execute("SELECT id, item_id FROM sales ORDER BY id DESC")
         sale = cursor.fetchone()
         try:
-            sale_id, item_id = sale[0], sale[1]
+            sale_id, item = sale[0], Item(sale[1])
         except TypeError:
             deleted_item_name = None
         else:
             cursor.execute("DELETE FROM sales WHERE id = {}".format(sale_id))
             conn.commit()
-            deleted_item_name = self.item_name(item_id)
+            deleted_item_name = item.name
         finally:
             conn.close()
         return deleted_item_name
@@ -128,6 +99,35 @@ class Item(object):
     def __init__(self, id):
         self.id = id
         self.db = Database()
-        self.name = self.db.item_name(self.id)
-        self.price = self.db.item_price(self.id)
-        self.sales = self.db.item_sales(self.id)
+        self.name = self.name()
+        self.price = self.price()
+
+    def name(self):
+        conn = sqlite3.connect(self.db.path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT name FROM items WHERE id = {}".format(self.id))
+        item_name = cursor.fetchone()[0]
+
+        conn.close()
+        return item_name
+
+    def price(self):
+        conn = sqlite3.connect(self.db.path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT price FROM items WHERE id = {}".format(self.id))
+        item_price = cursor.fetchone()[0]
+
+        conn.close()
+        return item_price
+
+    def sales(self, date):
+        conn = sqlite3.connect(self.db.path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM sales WHERE date = '{}' AND item_id = {}".
+                       format(date, self.id))
+        number_of_sales = len(cursor.fetchall())
+        conn.close()
+        return number_of_sales

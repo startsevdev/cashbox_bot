@@ -46,11 +46,12 @@ class Parser(object):
         date = self.search_date(string)
 
         if date and self.db.check_date(date):
-            bot_message = self.db.revenue(date)
+            bot_message = self.dashboard.day_board(date)
         elif date:
             bot_message = "Нет данных за этот день."
         elif string == "выручка":
-            bot_message = self.dashboard.day_board()
+            today = datetime.strftime(datetime.now(), "%d.%m.%Y")
+            bot_message = self.dashboard.day_board(today)
         else:
             bot_message = "Ошибка! Неверный формат даты."
         return bot_message
