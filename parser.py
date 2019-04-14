@@ -65,7 +65,8 @@ class Parser(object):
         elif date:
             bot_message = "Нет данных за этот день."
         elif string == "отчет" or string == "отчёт":
-            csv_file = self.csv_generator.write_csv(date=datetime.strftime(datetime.now(), "%d.%m.%Y"))
+            today = datetime.strftime(datetime.now(), "%d.%m.%Y")
+            csv_file = self.csv_generator.write_csv(today)
             bot_message = open(csv_file, 'rb')
         elif string == "отчет полный" or string == "отчёт полный":
             csv_file = self.csv_generator.write_csv("all")
