@@ -11,7 +11,7 @@ sys.path.append('../')
 import tokens
 
 
-bot = telebot.TeleBot(tokens.CoffeeCultureBot, threaded=False)
+bot = telebot.TeleBot(tokens.KKCashboxBot, threaded=False)
 db = Database()
 parser = Parser()
 csv_generator = CSVGenerator()
@@ -45,7 +45,8 @@ def send_hello(message):
 @bot.message_handler(commands=["revenue"])
 def send_revenue(message):
     console_print(message)
-    revenue = dashboard.day_board()
+    today = datetime.strftime(datetime.now(), "%d.%m.%Y")
+    revenue = dashboard.day_board(today)
     bot.send_message(message.from_user.id, revenue, reply_markup=keyboard())
 
 
